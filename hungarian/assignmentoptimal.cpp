@@ -5,10 +5,11 @@ function [assignment, cost] = assignmentoptimal(distMatrix)
 #include <mex.h>
 #include <matrix.h>
 
+#include <hungarian.h>
+
 //#define CHECK_FOR_INF
 
 void assignmentoptimal(double *assignment, double *cost, double *distMatrix, int nOfRows, int nOfColumns);
-void hungarian(double *assignment, double *cost, double *distMatrix, double *distMatrixIn, int nOfRows, int nOfColumns);
 
 void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 {
@@ -49,7 +50,10 @@ void assignmentoptimal(double *assignment, double *cost, double *distMatrixIn, i
 	/* generate working copy of distance Matrix */
 	/* check if all matrix elements are positive */
 	nOfElements   = nOfRows * nOfColumns;
-	distMatrix    = (double *)mxMalloc(nOfElements * sizeof(double));
+
+  //	distMatrix    = (double *)mxMalloc(nOfElements * sizeof(double));	
+	distMatrix    = new double [nOfElements]();
+  
 	distMatrixEnd = distMatrix + nOfElements;
 	for(row=0; row<nOfElements; row++)
 	{
@@ -93,12 +97,15 @@ void assignmentoptimal(double *assignment, double *cost, double *distMatrixIn, i
 	}
 #endif
 
-hungarian(assignment, cost, distMatrix, distMatrixIn, nOfRows, nOfColumns);	
+Hungarian h_assign(assignment, cost, distMatrix, distMatrixIn, nOfRows, nOfColumns);
+
+h_assign.computeAssignment();	
 
 for(row=0; row<nOfRows; row++)
   assignment[row] = assignment[row] + 1; /* MATLAB-Indexing */
-  
-mxFree(distMatrix);
+ 
+//mxFree(distMatrix);
+delete distMatrix;
 	
 return;
 				
