@@ -4,7 +4,14 @@
 class Hungarian {
 
 public:
-  Hungarian(double *assignment, double *cost, double *distMatrix, double *distMatrixIn, int nOfRows, int nOfColumns);
+  /*
+  assignment - Pointer to double array  1 x nOfRows that gives the indices of final assignemnt
+  cost - Total path cost of the final assignment
+  distMatrix - Pointer to the distance matrix - double array of size 1 x nOfRows * nOfColumns (Column-major order from Matlab)
+  nOfRows - number of robots
+  nOfColumns - number of goals
+  */
+  Hungarian(double *assignment, double *cost, double *distMatrixIn, int nOfRows, int nOfColumns);
   ~Hungarian();
   void computeAssignment();
   
