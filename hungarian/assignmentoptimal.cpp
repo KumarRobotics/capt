@@ -34,18 +34,12 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 void assignmentoptimal(double *assignment, double *cost, double *distMatrixIn, int nOfRows, int nOfColumns)
 {
 	double *distMatrix, *distMatrixTemp, *distMatrixEnd, value;
-	bool *coveredColumns, *coveredRows, *starMatrix, *newStarMatrix, *primeMatrix;
 	int nOfElements, row, col;
-#ifdef CHECK_FOR_INF
-	bool infiniteValueFound;
-	double maxFiniteValue, infValue;
-#endif
 	
 	/* initialization */
 	*cost = 0;
 	for(row=0; row<nOfRows; row++)
 		assignment[row] = -1.0;
-
 	
 	/* generate working copy of distance Matrix */
 	/* check if all matrix elements are positive */
@@ -64,6 +58,9 @@ void assignmentoptimal(double *assignment, double *cost, double *distMatrixIn, i
 	}
 
 #ifdef CHECK_FOR_INF
+	bool infiniteValueFound;
+	double maxFiniteValue, infValue;
+	
 	/* check for infinite values */
 	maxFiniteValue     = -1;
 	infiniteValueFound = false;
@@ -97,15 +94,22 @@ void assignmentoptimal(double *assignment, double *cost, double *distMatrixIn, i
 	}
 #endif
 
-Hungarian h_assign(assignment, cost, distMatrix, distMatrixIn, nOfRows, nOfColumns);
+  //Input for the library 
+  /*
+  assignment - Pointer to double array  1 x nOfRows that gives the indices of final assignemnt
+  cost - Total path cost of the final assignment
+  distMatrix - Pointer to the distance matrix - double array of size 1 x nOfRows * nOfColumns (Column-major order from Matlab)
+  nOfRows - number of robots
+  nOfColumns - number of goals
+  */
+  Hungarian h_assign(assignment, cost, distMatrix, nOfRows, nOfColumns);
+  h_assign.computeAssignment();	
 
-h_assign.computeAssignment();	
-
-for(row=0; row<nOfRows; row++)
-  assignment[row] = assignment[row] + 1; /* MATLAB-Indexing */
- 
-//mxFree(distMatrix);
-delete distMatrix;
+  for(row=0; row<nOfRows; row++)
+    assignment[row] = assignment[row] + 1; /* MATLAB-Indexing */
+   
+  //mxFree(distMatrix);
+  delete distMatrix;
 	
 return;
 				

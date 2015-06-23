@@ -3,16 +3,31 @@
 	
 #include <hungarian.h>
 	
-Hungarian::Hungarian(double *assignment, double *cost, double *distMatrix, double *distMatrixIn, int nOfRows, int nOfColumns)
+Hungarian::Hungarian(double *assignment, double *cost, double *distMatrixIn, int nOfRows, int nOfColumns)
 {
   nOfRows_ = nOfRows;
   nOfColumns_ = nOfColumns;
   assignment_ = assignment; 
   cost_ = cost;
-  distMatrix_ = distMatrix;
-  distMatrixIn_ = distMatrixIn;
-	
 	nOfElements_   = nOfRows_ * nOfColumns_;
+
+  distMatrixIn_ = distMatrixIn;
+    
+  //Make a copy of the input distance matrix 
+  distMatrix_ = new double [nOfElements_]();
+  
+  double value;
+	for(int row = 0; row < nOfElements_; row++)
+	{
+		value = distMatrixIn[row];
+		
+		//TODO check the distance matrix for negative numbers?
+		//if((value < 0))
+			//mexErrMsgTxt("All matrix elements have to be non-negative.");
+			
+		distMatrix_[row] = value;
+	}	  
+	
 	distMatrixEnd_ = distMatrix_ + nOfElements_;	
 							
 	/* memory allocation */		
@@ -122,6 +137,7 @@ return;
 Hungarian::~Hungarian()
 {
 	/* free allocated memory */
+	delete distMatrix_;
 	delete coveredColumns_;	
 	delete coveredRows_;
 	delete starMatrix_;
