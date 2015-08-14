@@ -9,11 +9,11 @@ function [assignment, cost] = assignmentoptimal(distMatrix)
 
 //#define CHECK_FOR_INF
 
-void assignmentoptimal(double *assignment, double *cost, double *distMatrix, int nOfRows, int nOfColumns);
+void assignmentoptimal(double *d_assignment, double *cost, double *distMatrix, int nOfRows, int nOfColumns);
 
 void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 {
-	double *assignment, *cost, *distMatrix;
+	double *d_assignment, *cost, *distMatrix;
 	int nOfRows, nOfColumns;
 	
 	/* Input arguments */
@@ -24,14 +24,14 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 	/* Output arguments */
 	plhs[0]    = mxCreateDoubleMatrix(nOfRows, 1, mxREAL);
 	plhs[1]    = mxCreateDoubleScalar(0);
-	assignment = mxGetPr(plhs[0]);
+	d_assignment = mxGetPr(plhs[0]);
 	cost       = mxGetPr(plhs[1]);
 	
 	/* Call C++-function */
-	assignmentoptimal(assignment, cost, distMatrix, nOfRows, nOfColumns);	
+	assignmentoptimal(d_assignment, cost, distMatrix, nOfRows, nOfColumns);	
 }
 
-void assignmentoptimal(double *assignment, double *cost, double *distMatrixIn, int nOfRows, int nOfColumns)
+void assignmentoptimal(double *d_assignment, double *cost, double *distMatrixIn, int nOfRows, int nOfColumns)
 {
 	double *distMatrix, *distMatrixTemp, *distMatrixEnd, value;
 	int nOfElements, row, col;
@@ -39,7 +39,7 @@ void assignmentoptimal(double *assignment, double *cost, double *distMatrixIn, i
 	/* initialization */
 	*cost = 0;
 	for(row=0; row<nOfRows; row++)
-		assignment[row] = -1.0;
+		d_assignment[row] = -1.0;
 	
 	/* generate working copy of distance Matrix */
 	/* check if all matrix elements are positive */
@@ -94,9 +94,14 @@ void assignmentoptimal(double *assignment, double *cost, double *distMatrixIn, i
 	}
 #endif
 
+  int* assignment;
+  assignment = new int[nOfRows];
+	for(int row=0; row<nOfRows; row++)
+	  assignment[row] = -1;
+		    
   //Input for the library 
   /*
-  assignment - Pointer to double array  1 x nOfRows that gives the indices of final assignemnt
+  assignment - Pointer to int array  1 x nOfRows that gives the indices of final assignemnt
   cost - Total path cost of the final assignment
   distMatrix - Pointer to the distance matrix - double array of size 1 x nOfRows * nOfColumns (Column-major order from Matlab)
   nOfRows - number of robots
@@ -106,7 +111,7 @@ void assignmentoptimal(double *assignment, double *cost, double *distMatrixIn, i
   h_assign.computeAssignment();	
 
   for(row=0; row<nOfRows; row++)
-    assignment[row] = assignment[row] + 1; /* MATLAB-Indexing */
+    d_assignment[row] = assignment[row] + 1; /* MATLAB-Indexing */
    
   //mxFree(distMatrix);
   delete distMatrix;
