@@ -11,7 +11,7 @@ public:
   nOfRows - number of robots
   nOfColumns - number of goals
   */
-  Hungarian(double *assignment, double *cost, double *distMatrixIn, int nOfRows, int nOfColumns);
+  Hungarian(int *assignment, double *cost, double *distMatrixIn, int nOfRows, int nOfColumns);
   ~Hungarian();
   void computeAssignment();
   
@@ -29,7 +29,8 @@ private:
 	int minDim_, nOfColumns_, nOfRows_, nOfElements_;
 					
 	bool *coveredColumns_, *coveredRows_, *starMatrix_, *newStarMatrix_, *primeMatrix_;
-	double *distMatrixEnd_, *assignment_, *cost_, *distMatrix_, *distMatrixIn_;
+	double *distMatrixEnd_, *cost_, *distMatrix_, *distMatrixIn_;
+	int *assignment_;
 	
 };
 

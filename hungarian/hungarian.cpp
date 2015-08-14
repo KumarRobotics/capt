@@ -3,7 +3,7 @@
 	
 #include <hungarian.h>
 	
-Hungarian::Hungarian(double *assignment, double *cost, double *distMatrixIn, int nOfRows, int nOfColumns)
+Hungarian::Hungarian(int *assignment, double *cost, double *distMatrixIn, int nOfRows, int nOfColumns)
 {
   nOfRows_ = nOfRows;
   nOfColumns_ = nOfColumns;
