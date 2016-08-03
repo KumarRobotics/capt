@@ -1,5 +1,5 @@
 #ifndef HUNGARIAN_ALGO_H_
-#define HUNGARAIN_ALGO_H_
+#define HUNGARIAN_ALGO_H_
 
 class Hungarian {
 
