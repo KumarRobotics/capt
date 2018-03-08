@@ -82,6 +82,9 @@ void mexFunction(int nlhs, mxArray *plhs[],
 		bots[i] = new Bot(1.0, start + i*dim, goal + i*dim, dim, &bm);;
 	}
 
+	delete[] start;
+	delete[] goal;
+
 	//Run update loop to simulate the motion of the bots
 	for (double t = 0; t < 1.01; t+=0.01) {
 		for (int i = 0; i < numBots; i++) {

@@ -137,12 +137,12 @@ return;
 Hungarian::~Hungarian()
 {
 	/* free allocated memory */
-	delete distMatrix_;
-	delete coveredColumns_;	
-	delete coveredRows_;
-	delete starMatrix_;
-	delete primeMatrix_;
-	delete newStarMatrix_;	
+	delete[] distMatrix_;
+	delete[] coveredColumns_;
+	delete[] coveredRows_;
+	delete[] starMatrix_;
+	delete[] primeMatrix_;
+	delete[] newStarMatrix_;
 }
 
 /********************************************************/

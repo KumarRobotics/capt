@@ -114,8 +114,8 @@ void assignmentoptimal(double *d_assignment, double *cost, double *distMatrixIn,
     d_assignment[row] = assignment[row] + 1; /* MATLAB-Indexing */
    
   //mxFree(distMatrix);
-  delete distMatrix;
-	
+  delete[] distMatrix;
+
 return;
 				
 }
